@@ -2,7 +2,7 @@ from datetime import datetime
 import os
 
 def kuwaitjob():
-   os.system('python kuwait_report.py') 
+   print('hello')
 
 def ksa_job():
   os.system('python ksa_report.py') 
