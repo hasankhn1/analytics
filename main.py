@@ -1,9 +1,11 @@
 from datetime import datetime
+import os
 
-def cronjob():
-    """
-    Main cron job.
-    The main cronjob to be run continuously.
-    """
-    print("Cron job is running")
-    print("Tick! The time is: %s" % datetime.now())
+def kuwaitjob():
+   os.system('python kuwait_report.py') 
+
+def ksa_job():
+  os.system('python ksa_report.py') 
+
+def uae_job():
+   os.system('python uae_report.py') 
