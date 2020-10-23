@@ -7,7 +7,8 @@ scheduler = APScheduler()
 
 
 def scheduled_ksa():
-  os.system('python ksa_report.py')
+  # os.system('python ksa_report.py')
+  print('hello')
 
 
 def scheduled_uae():
