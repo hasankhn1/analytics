@@ -2,10 +2,12 @@ from datetime import datetime
 import os
 
 def kuwaitjob():
-   print('hello')
+  print('hello kuwait')
+  import kuwait_report
 
 def ksa_job():
-  os.system('python ksa_report.py') 
+  print('hello ksa')
+  import ksa_report
 
 def uae_job():
-   os.system('python uae_report.py') 
+   import uae_report
