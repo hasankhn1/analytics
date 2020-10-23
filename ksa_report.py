@@ -64,7 +64,6 @@ body = """
     "select" : "(**)",
     "sorts" : [{"field":"creation_date", "sort_order":"asc"}]
 }"""
-f = csv.writer(open("test.csv", "wb+"))
 response = requests.post(new_url, headers=new_header, data=body)
 data = response.json()
 header_data = flatten_json(data['hits'][0])
@@ -118,9 +117,6 @@ while total != 0:
     }"""
   response = requests.post(new_url, headers=new_header, data=body)
   data = response.json()
-  outfile = open('./data.csv', 'w')
-  writer = csv.writer(outfile)
-  writer.writerow(original_row)
   if len(data['hits']):
     data_length = len(data['hits']) - 1
     while data_length != -1:
@@ -145,7 +141,6 @@ while total != 0:
           for dl in new_indexes:
             del new_row_data[76]
           ALL_ROWS.append(new_row_data)
-          writer.writerow(new_row_data)
       else:
         for x in row:
           if x == 'data__type':
@@ -157,7 +152,6 @@ while total != 0:
         for dl in new_indexes:
           del row_data[76]
         ALL_ROWS.append(row_data)
-        writer.writerow(row_data)
       product_items_length = product_items_length - 1
       data_length = data_length - 1
   start = recevied * 200
