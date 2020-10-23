@@ -1,5 +1,5 @@
 import boto3
-from decouple import config
+from decouple import  config
 from botocore.exceptions import NoCredentialsError
 
 ACCESS_KEY = config('ACCESS_KEY')
