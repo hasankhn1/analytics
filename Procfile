@@ -1,1 +1,1 @@
-clock: python cronjob.py
+web: uwsgi uwsgi.ini
