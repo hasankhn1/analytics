@@ -7,8 +7,8 @@ scheduler = APScheduler()
 
 
 def scheduled_ksa():
-  # os.system('python ksa_report.py')
   print('hello')
+  os.system('python ksa_report.py')
 
 
 def scheduled_uae():
@@ -20,17 +20,17 @@ def scheduled_kuwait():
 
 
 def scheduled_analytics():
-  os.system('python analytics.py')
+  os.system('python anlaytics.py')
 
 
 if __name__ == '__main__':
   scheduler.add_job(id='Scheduled KSA Orders', func=scheduled_ksa,
-                    trigger='interval', seconds=10)
-  # scheduler.add_job(id='Scheduled UAE Orders', func=scheduled_uae,
-  #                   trigger='interval', seconds=3)
-  # scheduler.add_job(id='Scheduled KUWAIT Orders', func=scheduled_kuwait,
-  #                   trigger='interval', seconds=4)
-  # scheduler.add_job(id='Analytics', func=scheduled_analytics,
-  #                   trigger='interval', minutes=5)
+                    trigger='interval', minutes=10)
+  scheduler.add_job(id='Scheduled UAE Orders', func=scheduled_uae,
+                    trigger='interval', minutes=10)
+  scheduler.add_job(id='Scheduled KUWAIT Orders', func=scheduled_kuwait,
+                    trigger='interval', minutes=10)
+  scheduler.add_job(id='Analytics', func=scheduled_analytics,
+                    trigger='interval', minutes=12)
   scheduler.start()
   app.run(port=5000, debug=True)
