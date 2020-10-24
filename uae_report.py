@@ -4,7 +4,7 @@ from requests.auth import HTTPBasicAuth
 import math
 import csv
 import pandas as pd
-
+from headers import APPEND_HEADERS
 
 def get_unique_numbers(numbers):
     unique = []
@@ -79,15 +79,19 @@ for key in header_data.keys():
 new_indexes = []
 count = 0
 for i in range(len(original_row)):
-  
+
   for num in range(30):
     if 'items_'+str(num) in original_row[i]:
       new_indexes.append(count)
   count = count + 1
 
 for o in new_indexes:
-  del original_row[76]
+  del original_row[o]
 
+for header in APPEND_HEADERS:
+  row.append(header)
+  original_row.append(header)
+  
 ALL_ROWS=[]
 
 total = math.ceil(data['total']/200)
@@ -139,7 +143,7 @@ while total != 0:
             else:
               new_row_data.append('')
           for dl in new_indexes:
-            del new_row_data[76]
+            del new_row_data[dl]
           ALL_ROWS.append(new_row_data)
       else:
         for x in row:
@@ -150,7 +154,7 @@ while total != 0:
           else:
             row_data.append('')
         for dl in new_indexes:
-          del row_data[76]
+          del row_data[dl]
         ALL_ROWS.append(row_data)
       product_items_length = product_items_length - 1
       data_length = data_length - 1

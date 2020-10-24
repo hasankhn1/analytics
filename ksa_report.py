@@ -4,7 +4,7 @@ from requests.auth import HTTPBasicAuth
 import math
 import csv
 import pandas as pd
-
+from headers import APPEND_HEADERS
 
 def get_unique_numbers(numbers):
     unique = []
@@ -86,10 +86,14 @@ for i in range(len(original_row)):
   count = count + 1
 
 for o in new_indexes:
-  del original_row[76]
+  del original_row[o]
 
 ALL_ROWS=[]
 
+for header in APPEND_HEADERS:
+  row.append(header)
+  original_row.append(header)
+  
 total = math.ceil(data['total']/200)
 start = 0
 count = 200
