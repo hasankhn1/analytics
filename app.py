@@ -20,17 +20,17 @@ def scheduled_kuwait():
 
 
 def scheduled_analytics():
-  import anlaytics
+  os.system('python anlaytics.py')
 
 
 if __name__ == '__main__':
-  scheduler.add_job(id='Scheduled KSA Orders', func=scheduled_ksa,
-                    trigger='interval', minutes=10)
-  scheduler.add_job(id='Scheduled UAE Orders', func=scheduled_uae,
-                    trigger='interval', minutes=10)
-  scheduler.add_job(id='Scheduled KUWAIT Orders', func=scheduled_kuwait,
-                    trigger='interval', minutes=10)
+  # scheduler.add_job(id='Scheduled KSA Orders', func=scheduled_ksa,
+  #                   trigger='interval', minutes=10)
+  # scheduler.add_job(id='Scheduled UAE Orders', func=scheduled_uae,
+  #                   trigger='interval', minutes=10)
+  # scheduler.add_job(id='Scheduled KUWAIT Orders', func=scheduled_kuwait,
+  #                   trigger='interval', minutes=10)
   scheduler.add_job(id='Analytics', func=scheduled_analytics,
-                    trigger='interval', minutes=12)
+                    trigger='interval', seconds=10)
   scheduler.start()
   app.run(port=5000)
