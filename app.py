@@ -7,6 +7,7 @@ scheduler = APScheduler()
 
 
 def scheduled_ksa():
+  print('hello')
   import ksa_report
 
 
@@ -24,7 +25,7 @@ def scheduled_analytics():
 
 if __name__ == '__main__':
   scheduler.add_job(id='Scheduled KSA Orders', func=scheduled_ksa,
-                    trigger='interval', minutes=10)
+                    trigger='interval', seconds=13)
   scheduler.add_job(id='Scheduled UAE Orders', func=scheduled_uae,
                     trigger='interval', minutes=10)
   scheduler.add_job(id='Scheduled KUWAIT Orders', func=scheduled_kuwait,
