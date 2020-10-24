@@ -7,20 +7,19 @@ scheduler = APScheduler()
 
 
 def scheduled_ksa():
-  print('hello')
-  os.system('python ksa_report.py')
+  import ksa_report
 
 
 def scheduled_uae():
-  os.system('python uae_report.py')
+  import uae_report
 
 
 def scheduled_kuwait():
-  os.system('python kuwait_report.py')
+  import kuwait_report
 
 
 def scheduled_analytics():
-  os.system('python anlaytics.py')
+  import anlaytics
 
 
 if __name__ == '__main__':
