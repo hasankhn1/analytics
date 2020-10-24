@@ -22,9 +22,10 @@ APPEND_HEADERS = [
     'order_price_adjustments_1_applied_discount_amount',
     'order_price_adjustments_1_applied_discount_percentage',
     'order_price_adjustments_1_applied_discount_type',
-    "coupon_items_0__type",
-    "coupon_items_0_code",
-    "coupon_items_0_coupen_item_id",
-    "coupon_items_0_status_code",
-    "coupon_items_0_valid",
+    'coupon_items_0__type',
+    'coupon_items_0_code',
+    'coupon_items_0_coupen_item_id',
+    'coupon_items_0_status_code',
+    'coupon_items_0_valid',
+    'c_fluentOrderUpdateJsonData'
 ]
