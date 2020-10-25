@@ -28,7 +28,7 @@ def scheduled_analytics():
   os.system('python anlaytics.py')
 
 if __name__ == '__main__':
-  if config('ENVIRONEMENT') == 'development':
+  if config('ENVIRONMENT') == 'development':
     log.warning("Running on debug mode not for production.")
     app.run(host='127.0.0.1', port=5000, debug=True)
   else:
