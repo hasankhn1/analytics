@@ -1,9 +1,14 @@
 import os
 from flask import Flask, request
 from flask_apscheduler import APScheduler
+from gevent.pywsgi import  WSGIServer
+from decouple import config
+import logging
+from contextlib import suppress
 
 app = Flask(__name__)
 scheduler = APScheduler()
+log = logging.getLogger()
 
 
 def scheduled_ksa():
@@ -22,15 +27,12 @@ def scheduled_kuwait():
 def scheduled_analytics():
   os.system('python anlaytics.py')
 
-
 if __name__ == '__main__':
-  scheduler.add_job(id='Scheduled KSA Orders', func=scheduled_ksa,
-                    trigger='interval', minutes=10)
-  scheduler.add_job(id='Scheduled UAE Orders', func=scheduled_uae,
-                    trigger='interval', minutes=10)
-  scheduler.add_job(id='Scheduled KUWAIT Orders', func=scheduled_kuwait,
-                    trigger='interval', minutes=10)
-  scheduler.add_job(id='Analytics', func=scheduled_analytics,
-                    trigger='interval', minutes=12)
-  scheduler.start()
-  app.run(port=5000)
+  if config('ENVIRONEMENT') == 'development':
+    log.warning("Running on debug mode not for production.")
+    app.run(host='127.0.0.1', port=5000, debug=True)
+  else:
+    http_server = WSGIServer(('127.0.0.1', 5000), app)
+    log.warning("Running on  production.")
+    with suppress(KeyboardInterrupt):
+      http_server.serve_forever()
