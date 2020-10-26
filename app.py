@@ -5,49 +5,28 @@ from gevent.pywsgi import WSGIServer
 from decouple import config
 import logging
 from contextlib import suppress
+from flask_restful import Resource, Api, reqparse
+from getReq import  Item
+from flask_crontab import Crontab
 
 app = Flask(__name__)
-scheduler = APScheduler()
+crontab = Crontab(app)
 log = logging.getLogger()
 
+api = Api(app)
+api.add_resource(Item, '/stores')
 
-def scheduled_ksa():
-  print('hello')
-  import ksa_report
-
-
-def scheduled_uae():
-  import uae_report
-
-
-def scheduled_kuwait():
-  import kuwait_report
-
+scheduler = APScheduler()
+def scheduled_task():
+  os.system('python ksa_report.py')
+  os.system('python uae_report.py')
+  os.system('python kuwait_report.py')
 
 def scheduled_analytics():
-  os.system('python anlaytics.py')
-
-
-def run_jobs():
-  scheduler.add_job(id='Scheduled KSA Orders', func=scheduled_ksa,
-                    trigger='interval', seconds=5)
-  scheduler.add_job(id='Scheduled UAE Orders', func=scheduled_uae,
-                    trigger='interval', minutes=10)
-  scheduler.add_job(id='Scheduled KUWAIT Orders', func=scheduled_kuwait,
-                    trigger='interval', minutes=10)
-  scheduler.add_job(id='Analytics', func=scheduled_analytics,
-                    trigger='interval', minutes=12)
-  scheduler.start()
-
+  os.system('python analytics.py')
 
 if __name__ == '__main__':
-  if config('ENVIRONMENT') == 'development':
-    log.warning("Running on debug mode not for production.")
-    run_jobs()
-    app.run(host='127.0.0.1', port=5000, debug=True)
-  else:
-    http_server = WSGIServer(('127.0.0.1', 5000), app)
-    log.warning("Running on  production.")
-    run_jobs()
-    with suppress(KeyboardInterrupt):
-      http_server.serve_forever()
+  scheduler.add_job(id='Scheduled Orders', func=scheduled_task, trigger='interval', minutes = 3)
+  scheduler.add_job(id='Analytics', func=scheduled_analytics, trigger='interval', minutes = 4)
+  scheduler.start()
+  app.run(port=5000, debug=True)

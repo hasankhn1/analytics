@@ -99,7 +99,6 @@ start = 0
 count = 200
 recevied = 1
 print(data['total'])
-
 while total != 0:
   body = """
     {"query" : {
@@ -163,6 +162,6 @@ while total != 0:
   count = (recevied + 1) * 200
   recevied = recevied + 1
   total = total-1
-
+print(data['total'],'uae')
 city = pd.DataFrame(ALL_ROWS, columns=original_row)
 city.to_csv('orders_uae.csv')
