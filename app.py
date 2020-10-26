@@ -7,7 +7,6 @@ import logging
 from contextlib import suppress
 from flask_restful import Resource, Api, reqparse
 from getReq import  Item
-from flask_crontab import Crontab
 
 app = Flask(__name__)
 crontab = Crontab(app)
