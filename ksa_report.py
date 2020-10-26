@@ -163,7 +163,5 @@ while total != 0:
   total = total-1
 
 
-print(ALL_ROWS)
-print(original_row)
 city = pd.DataFrame(ALL_ROWS, columns=original_row)
 city.to_csv('orders_ksa.csv')

@@ -98,7 +98,6 @@ total = math.ceil(data['total']/200)
 start = 0
 count = 200
 recevied = 1
-print(to)
 while total != 0:
   body = """
     {"query" : {
