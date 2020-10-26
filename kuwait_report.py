@@ -51,7 +51,7 @@ body = """
             "filter": {
                 "range_filter": {
                     "field": "creation_date",
-                    "from": "2020-10-18T00:00:00.000Z"
+                    "from": "2020-10-12"
                 }
             },
             "query" : {
@@ -98,7 +98,7 @@ total = math.ceil(data['total']/200)
 start = 0
 count = 200
 recevied = 1
-
+print(to)
 while total != 0:
   body = """
     {"query" : {
@@ -106,7 +106,7 @@ while total != 0:
             "filter": {
                 "range_filter": {
                     "field": "creation_date",
-                    "from": "2020-10-18T00:00:00.000Z"
+                    "from": "2020-10-12"
                 }
             },
             "query" : {

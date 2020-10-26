@@ -51,7 +51,7 @@ body = """
             "filter": {
                 "range_filter": {
                     "field": "creation_date",
-                    "from": "2020-10-18T00:00:00.000Z"
+                    "from": "2020-10-12"
                 }
             },
             "query" : {
@@ -91,13 +91,14 @@ for o in new_indexes:
 for header in APPEND_HEADERS:
   row.append(header)
   original_row.append(header)
-  
+
 ALL_ROWS=[]
 
 total = math.ceil(data['total']/200)
 start = 0
 count = 200
 recevied = 1
+print(data['total'])
 
 while total != 0:
   body = """
@@ -106,7 +107,7 @@ while total != 0:
             "filter": {
                 "range_filter": {
                     "field": "creation_date",
-                    "from": "2020-10-18T00:00:00.000Z"
+                    "from": "2020-10-12"
                 }
             },
             "query" : {
