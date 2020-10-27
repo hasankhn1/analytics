@@ -64,16 +64,15 @@ while hasNextP:
                 'Content-Type': ''}
   body = """
         {"query":"query Fulfilments($cursor:String){\
-        fulfilments(createdOn: {from: \\"2020-10-19\\"},first: 50, after:$cursor) {\
+        fulfilments(createdOn: {from: \\"2020-10-26\\"},first: 50, after:$cursor) {\
           pageInfo { hasNextPage, hasPreviousPage } edges {\
           cursor, node { id, ref, order{ id, ref, createdOn, updatedOn, status } status, type, createdOn, toAddress {\
           id, ref }, fromAddress { id, ref }, attributes { type, value, name }, items(first: 50) {\
           itemEdge: edges { itemNode: node {\
-          id, ref, status, requestedQuantity, filledQuantity, rejectedQuantity, orderItem { id, ref }\
+          id, ref, status, requestedQuantity, filledQuantity, rejectedQuantity, orderItem { id, ref, status, quantity, currency, paidPrice product { ... on VariantProduct { ref } } }\
           } } } } } }}",\
           "variables":{"ref":["%"],"cursor":\""""+cursor+"""\"}}
 """
-
   response = requests.post(new_url, headers=new_header, data=body)
   data = response.json()
   cursor = data['data']['fulfilments']['edges'][len(data['data']['fulfilments']['edges'])-1]['cursor']
@@ -125,6 +124,11 @@ while data_length != -1:
         edge_row['itemNode']['rejectedQuantity'],
         edge_row['itemNode']['orderItem']['id'],
         edge_row['itemNode']['orderItem']['ref'],
+        edge_row['itemNode']['orderItem']['status'],
+        edge_row['itemNode']['orderItem']['quantity'],
+        edge_row['itemNode']['orderItem']['currency'],
+        edge_row['itemNode']['orderItem']['paidPrice'],
+        edge_row['itemNode']['orderItem']['product']['ref'],
     ])
   data_length = data_length - 1
 original_row = [
@@ -153,7 +157,12 @@ original_row = [
     'node_items_itemEdge_itemNode_filledQuantity',
     'node_items_itemEdge_itemNode_rejectedQuantity',
     'node_items_itemEdge_itemNode_orderItem_id',
-    'node_items_itemEdge_itemNode_orderItem_ref'
+    'node_items_itemEdge_itemNode_orderItem_ref',
+    'node_items_itemEdge_itemNode_orderItem_status',
+    'node_items_itemEdge_itemNode_orderItem_quantity',
+    'node_items_itemEdge_itemNode_orderItem_currency',
+    'node_items_itemEdge_itemNode_orderItem_paid_price',
+    'node_items_itemEdge_itemNode_orderItem_product_ref'
 ]
 city = pd.DataFrame(allNewData, columns=original_row)
 city.to_csv('fulfilments.csv')

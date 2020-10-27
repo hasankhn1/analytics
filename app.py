@@ -19,10 +19,9 @@ def scheduled_task():
   os.system('python ksa_report.py')
   os.system('python uae_report.py')
   os.system('python kuwait_report.py')
-  os.system('python fulfillments.py')
+  os.system('python consignments.py')
   os.system('python fulfilments.py')
   os.system('python return_fulfilments.py')
-  os.system('python fulfilments.py')
   os.system('python return_order.py')
 
 def scheduled_analytics():
