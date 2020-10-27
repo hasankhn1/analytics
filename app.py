@@ -30,6 +30,6 @@ def scheduled_analytics():
 
 if __name__ == '__main__':
   scheduler.add_job(id='Scheduled Orders', func=scheduled_task, trigger='interval', minutes = 10)
-  scheduler.add_job(id='Analytics', func=scheduled_analytics, trigger='interval', minutes = 13)
+  scheduler.add_job(id='Analytics', func=scheduled_analytics, trigger='interval', minutes = 15)
   scheduler.start()
   app.run(port=5000, debug=True)
