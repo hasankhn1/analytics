@@ -64,7 +64,7 @@ while hasNextP:
                 'Content-Type': ''}
   body = """
         {"query":"query Fulfilments($cursor:String){\
-        fulfilments(createdOn: {from: \\"2020-10-26\\"},first: 50, after:$cursor) {\
+        fulfilments(createdOn: {from: \\"2020-10-19\\"},first: 50, after:$cursor) {\
           pageInfo { hasNextPage, hasPreviousPage } edges {\
           cursor, node { id, ref, order{ id, ref, createdOn, updatedOn, status } status, type, createdOn, toAddress {\
           id, ref }, fromAddress { id, ref }, attributes { type, value, name }, items(first: 50) {\

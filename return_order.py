@@ -82,7 +82,7 @@ while users != 0:
                   'Content-Type': ''}
     body = """{"query":\
       "query searchReturnOrder ($retailerId: ID!, $ref : [String!], $cursor:String, $exchangeOrder: OrderLinkInput,  $includeAttributes: Boolean!) {\
-        returnOrders (first: 100, ref: $ref, retailer: { id: $retailerId }, exchangeOrder: $exchangeOrder, after: $cursor) {\
+        returnOrders (first: 100, ref: $ref,  createdOn: {from:\\"2020-10-19\\"}, retailer: { id: $retailerId }, exchangeOrder: $exchangeOrder, after: $cursor) {\
           pageInfo{hasNextPage}\
           edges { cursor node {ref id type status createdOn updatedOn currency { alphabeticCode }exchangeOrder {\
             ref }order { ref }retailer { id }subTotalAmount { amount } totalAmount { amount }customer { ref } exchangeOrder { ref }\
