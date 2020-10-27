@@ -16,6 +16,7 @@ api.add_resource(Item, '/stores')
 
 scheduler = APScheduler()
 def scheduled_task():
+  print('working in background')
   os.system('python ksa_report.py')
   os.system('python uae_report.py')
   os.system('python kuwait_report.py')
