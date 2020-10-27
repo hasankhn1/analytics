@@ -6,12 +6,14 @@ import csv
 import pandas as pd
 from headers import APPEND_HEADERS
 
+
 def get_unique_numbers(numbers):
     unique = []
     for number in numbers:
         if number not in unique:
             unique.append(number)
     return unique
+
 
 def flatten_json(y):
     out = {}
@@ -79,7 +81,7 @@ for key in header_data.keys():
 new_indexes = []
 count = 0
 for i in range(len(original_row)):
-  
+
   for num in range(30):
     if 'items_'+str(num) in original_row[i]:
       new_indexes.append(count)
@@ -88,7 +90,7 @@ for i in range(len(original_row)):
 for o in new_indexes:
   del original_row[o]
 
-ALL_ROWS=[]
+ALL_ROWS = []
 for header in APPEND_HEADERS:
   row.append(header)
   original_row.append(header)
@@ -96,7 +98,6 @@ total = math.ceil(data['total']/200)
 start = 0
 count = 200
 recevied = 1
-print(data['total'])
 
 while total != 0:
   body = """
@@ -162,6 +163,5 @@ while total != 0:
   recevied = recevied + 1
   total = total-1
 
-print(data['total'],'ksa')
 city = pd.DataFrame(ALL_ROWS, columns=original_row)
 city.to_csv('orders_ksa.csv')

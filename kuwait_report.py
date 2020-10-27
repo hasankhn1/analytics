@@ -161,6 +161,6 @@ while total != 0:
   count = (recevied + 1) * 200
   recevied = recevied + 1
   total = total-1
-print(data['total'],'kuwait')
+
 city = pd.DataFrame(ALL_ROWS, columns=original_row)
 city.to_csv('orders_kuwait.csv')

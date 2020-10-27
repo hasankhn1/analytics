@@ -9,7 +9,6 @@ from flask_restful import Resource, Api, reqparse
 from getReq import  Item
 
 app = Flask(__name__)
-crontab = Crontab(app)
 log = logging.getLogger()
 
 api = Api(app)
@@ -20,6 +19,11 @@ def scheduled_task():
   os.system('python ksa_report.py')
   os.system('python uae_report.py')
   os.system('python kuwait_report.py')
+  os.system('python fulfillments.py')
+  os.system('python fulfilments.py')
+  os.system('python return_fulfilments.py')
+  os.system('python fulfillments.py')
+  os.system('python return_order.py')
 
 def scheduled_analytics():
   os.system('python analytics.py')
