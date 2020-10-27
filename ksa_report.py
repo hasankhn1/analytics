@@ -53,7 +53,7 @@ body = """
             "filter": {
                 "range_filter": {
                     "field": "creation_date",
-                    "from": "2020-10-19"
+                    "from": "2020-10-12"
                 }
             },
             "query" : {
@@ -98,6 +98,7 @@ total = math.ceil(data['total']/200)
 start = 0
 count = 200
 recevied = 1
+print(data['total'])
 
 while total != 0:
   body = """
@@ -106,7 +107,7 @@ while total != 0:
             "filter": {
                 "range_filter": {
                     "field": "creation_date",
-                    "from": "2020-10-19"
+                    "from": "2020-10-12"
                 }
             },
             "query" : {
@@ -163,5 +164,6 @@ while total != 0:
   recevied = recevied + 1
   total = total-1
 
+print(data['total'], 'ksa')
 city = pd.DataFrame(ALL_ROWS, columns=original_row)
 city.to_csv('orders_ksa.csv')

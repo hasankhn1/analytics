@@ -51,7 +51,7 @@ body = """
             "filter": {
                 "range_filter": {
                     "field": "creation_date",
-                    "from": "2020-10-19"
+                    "from": "2020-10-12"
                 }
             },
             "query" : {
