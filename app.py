@@ -26,7 +26,7 @@ def scheduled_task():
   os.system('python return_order.py')
 
 def scheduled_analytics():
-  os.system('python analytics.py')
+  os.system('python anlaytics.py')
 
 if __name__ == '__main__':
   scheduler.add_job(id='Scheduled Orders', func=scheduled_task, trigger='interval', minutes = 10)
