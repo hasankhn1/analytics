@@ -43,7 +43,7 @@ response = requests.post(url, auth=authen, params=url_param, headers=header)
 response_dict = json.loads(response.text)
 token = response_dict["access_token"]
 result = []
-new_url = "https://production-eu01-sunandsand.demandware.net/s/UAE/dw/shop/v20_2/order_search"
+new_url = "https://production-eu01-sunandsand.demandware.net/s/Kuwait/dw/shop/v20_2/order_search"
 new_url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77'}
 new_header = {'Authorization': 'Bearer ' + token, 'Origin': 'https://production-eu01-sunandsand.demandware.net',
               'Content-Type': 'application/json;charset=UTF-8'}
