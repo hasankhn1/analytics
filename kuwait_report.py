@@ -4,7 +4,8 @@ from requests.auth import HTTPBasicAuth
 import math
 import csv
 import pandas as pd
-from headers import  APPEND_HEADERS
+from headers import APPEND_HEADERS
+
 
 def get_unique_numbers(numbers):
     unique = []
@@ -12,6 +13,7 @@ def get_unique_numbers(numbers):
         if number not in unique:
             unique.append(number)
     return unique
+
 
 def flatten_json(y):
     out = {}
@@ -41,63 +43,18 @@ response = requests.post(url, auth=authen, params=url_param, headers=header)
 response_dict = json.loads(response.text)
 token = response_dict["access_token"]
 result = []
-new_url = "https://production-eu01-sunandsand.demandware.net/s/Kuwait/dw/shop/v20_2/order_search"
+new_url = "https://production-eu01-sunandsand.demandware.net/s/UAE/dw/shop/v20_2/order_search"
 new_url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77'}
 new_header = {'Authorization': 'Bearer ' + token, 'Origin': 'https://production-eu01-sunandsand.demandware.net',
               'Content-Type': 'application/json;charset=UTF-8'}
-body = """
-    {"query" : {
-        "filtered_query": {
-            "filter": {
-                "range_filter": {
-                    "field": "creation_date",
-                    "from": "2020-10-12"
-                }
-            },
-            "query" : {
-                "match_all_query": {}
-            }
-        }
-    },
-      "start": """+str(0)+""",
-     "count":"""+str(1)+""",
-    "select" : "(**)",
-    "sorts" : [{"field":"creation_date", "sort_order":"asc"}]
-}"""
-response = requests.post(new_url, headers=new_header, data=body)
-data = response.json()
-header_data = flatten_json(data['hits'][0])
-row = []
-original_row = []
-for key in header_data.keys():
-  if key == 'data__type':
-    original_row.append(key)
-    row.append(key)
-  else:
-    row.append(key.replace('data_', ""))
-    original_row.append(key.replace('data_', "").replace('_0', ""))
-new_indexes = []
-count = 0
-for i in range(len(original_row)):
-  
-  for num in range(30):
-    if 'items_'+str(num) in original_row[i]:
-      new_indexes.append(count)
-  count = count + 1
 
-for o in new_indexes:
-  del original_row[76]
-
-for header in APPEND_HEADERS:
-  row.append(header)
-  original_row.append(header)
-
-ALL_ROWS=[]
-
-total = math.ceil(data['total']/200)
+total = 1
+totalFlag = 1
+allNewData = []
 start = 0
 count = 200
 recevied = 1
+
 while total != 0:
   body = """
     {"query" : {
@@ -114,53 +71,126 @@ while total != 0:
         }
     },
     "start": """+str(start)+""",
-    "count":"""+str(200)+""",
+    "count":"""+str(count)+""",
     "select" : "(**)",
     "sorts" : [{"field":"creation_date", "sort_order":"asc"}]
     }"""
   response = requests.post(new_url, headers=new_header, data=body)
   data = response.json()
+  if totalFlag == 1:
+    total = math.ceil(data['total']/200)
+    totalFlag  = 0
   if len(data['hits']):
     data_length = len(data['hits']) - 1
     while data_length != -1:
-      result.append(data['hits'][data_length]['data'])
-      new_flat_json_data = flatten_json(data['hits'][data_length]['data'])
-      row_data = []
-      product_items_length = len(
-          data['hits'][data_length]['data']['product_items'])
-      if product_items_length > 1:
-        for product_item in data['hits'][data_length]['data']['product_items']:
-          new_row_data = []
-          for x in row:
-            if x == 'data__type':
-              new_row_data.append('order')
-            elif product_item.get(x.replace('product_items_0_', '')):
-              new_row_data.append(
-                  product_item[x.replace('product_items_0_', '')])
-            elif new_flat_json_data.get(x):
-              new_row_data.append(new_flat_json_data[x])
-            else:
-              new_row_data.append('')
-          for dl in new_indexes:
-            del new_row_data[76]
-          ALL_ROWS.append(new_row_data)
-      else:
-        for x in row:
-          if x == 'data__type':
-            row_data.append('order')
-          elif new_flat_json_data.get(x):
-            row_data.append(new_flat_json_data[x])
-          else:
-            row_data.append('')
-        for dl in new_indexes:
-          del row_data[76]
-        ALL_ROWS.append(row_data)
-      product_items_length = product_items_length - 1
+      single_row = data['hits'][data_length]
+      for edge_row in single_row['data']['product_items']:
+        allNewData.append([
+            data['hits'][data_length]['data']['_type'],
+            data['hits'][data_length]['data']['adjusted_merchandize_total_tax'],
+            data['hits'][data_length]['data']['adjusted_shipping_total_tax'],
+            data['hits'][data_length]['data']['confirmation_status'],
+            data['hits'][data_length]['data']['created_by'],
+            data['hits'][data_length]['data']['creation_date'],
+            data['hits'][data_length]['data']['currency'],
+            data['hits'][data_length]['data']['customer_info']['_type'] if '_type' in data['hits'][data_length]['data']['customer_info'] else '',
+            data['hits'][data_length]['data']['customer_info']['customer_id'] if 'customer_id' in data['hits'][data_length]['data']['customer_info'] else '',
+            data['hits'][data_length]['data']['customer_info']['customer_name'] if 'customer_name' in data['hits'][data_length]['data']['customer_info'] else '',
+            data['hits'][data_length]['data']['customer_info']['customer_no'] if 'customer_no' in data['hits'][data_length]['data']['customer_info'] else '',
+            data['hits'][data_length]['data']['customer_info']['customer_email'] if 'customer_email' in data['hits'][data_length]['data']['customer_info'] else '',
+            data['hits'][data_length]['data']['billing_address']['_type'] if '_type' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['address1'] if 'address1' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['city'] if 'city' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['country_code'] if 'country_code' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['first_name'] if 'first_name' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['full_name'] if 'full_name' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['id'] if 'id' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['last_name'] if 'last_name' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['phone'] if 'phone' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['salutation'] if 'salutation' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['c_area'] if 'c_area' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['c_email'] if 'c_email' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['billing_address']['c_phoneWhatsApp'] if 'c_phoneWhatsApp' in data['hits'][data_length]['data']['billing_address'] else '',
+            data['hits'][data_length]['data']['export_status'],
+            data['hits'][data_length]['data']['last_modified'],
+            data['hits'][data_length]['data']['merchandize_total_tax'],
+            data['hits'][data_length]['data']['notes']['_type'],
+            data['hits'][data_length]['data']['notes']['link'],
+            data['hits'][data_length]['data']['order_no'],
+            data['hits'][data_length]['data']['order_price_adjustments'] if 'order_price_adjustments' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['order_token'],
+            data['hits'][data_length]['data']['order_total'],
+            data['hits'][data_length]['data']['payment_instruments'],
+            data['hits'][data_length]['data']['payment_status'],
+            edge_row['_type'],
+            edge_row['adjusted_tax'],
+            edge_row['base_price'],
+            edge_row['bonus_product_line_item'],
+            edge_row['gift'],
+            edge_row['item_id'],
+            edge_row['item_text'],
+            edge_row['price'],
+            edge_row['price_after_item_discount'],
+            edge_row['price_after_order_discount'],
+            edge_row['product_id'],
+            edge_row['product_name'],
+            edge_row['quantity'],
+            edge_row['shipment_id'],
+            edge_row['tax'],
+            edge_row['tax_basis'],
+            edge_row['tax_class_id'],
+            edge_row['tax_rate'],
+            edge_row['c_isBigBox'],
+            edge_row['c_isCCAvailable'],
+            edge_row['c_listPrice'],
+            edge_row['c_maxBuyableQuantity'],
+            edge_row['c_productImage'],
+            edge_row['c_proratedPrice'] if 'c_proratedPrice' in edge_row else '',
+            edge_row['c_selectedShoeFormat'] if 'c_selectedShoeFormat' in edge_row else '',
+            edge_row['c_selectedSize'] if 'c_selectedSize' in edge_row else '',
+            data['hits'][data_length]['data']['product_sub_total'],
+            data['hits'][data_length]['data']['product_total'],
+            data['hits'][data_length]['data']['shipments'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_method']['_type'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_method']['id'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_method']['name'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_method']['c_estimatedArrivalTime'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_method']['c_fluentShippingCode'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_method']['c_hideForBigBox'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_method']['c_storePickupEnabled'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_status'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_total'],
+            data['hits'][data_length]['data']['shipments'][0]['shipping_total_tax'],
+            data['hits'][data_length]['data']['shipments'][0]['tax_total'],
+            data['hits'][data_length]['data']['shipping_items'],
+            data['hits'][data_length]['data']['shipping_status'],
+            data['hits'][data_length]['data']['shipping_total'],
+            data['hits'][data_length]['data']['shipping_total_tax'],
+            data['hits'][data_length]['data']['site_id'] if 'site_id' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['status'] if 'status' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['taxation'] if 'taxation' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['tax_total'] if 'tax_total' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_carrier'] if 'c_carrier' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_customOrderStatus'] if 'c_customOrderStatus' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_fluentOrderId'] if 'c_fluentOrderId' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_fluentOrderUpdateJsonData'] if 'c_fluentOrderUpdateJsonData' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_latitude'] if 'c_latitude' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_longitude'] if 'c_longitude' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_orderPushedToFluent'] if 'c_orderPushedToFluent' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_orderPushedToFluentDate'] if 'c_orderPushedToFluentDate' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_orderPushedToFluentError'] if 'c_orderPushedToFluentError' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_placedLocale'] if 'c_placedLocale' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_returnOrderIds'] if 'c_returnOrderIds' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_sscContactId'] if 'c_sscContactId' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_sscSyncResponseText'] if 'c_sscSyncResponseText' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_sscSyncStatus'] if 'c_sscSyncStatus' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_sscid'] if 'c_sscid' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['relevance'] if 'relevance' in data['hits'][data_length] else '',
+        ])
       data_length = data_length - 1
-  start = recevied * 200
-  count = (recevied + 1) * 200
-  recevied = recevied + 1
-  total = total-1
+    start = recevied * 200
+    recevied = recevied + 1
+    total = total - 1
 
-city = pd.DataFrame(ALL_ROWS, columns=original_row)
+city = pd.DataFrame(allNewData, columns=APPEND_HEADERS)
 city.to_csv('orders_kuwait.csv')
