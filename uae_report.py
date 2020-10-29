@@ -80,6 +80,7 @@ while total != 0:
   if totalFlag == 1:
     total = math.ceil(data['total']/200)
     totalFlag  = 0
+  print(data['total'])
   if len(data['hits']):
     data_length = len(data['hits']) - 1
     while data_length != -1:
@@ -97,7 +98,7 @@ while total != 0:
             data['hits'][data_length]['data']['customer_info']['customer_id'] if 'customer_id' in data['hits'][data_length]['data']['customer_info'] else '',
             data['hits'][data_length]['data']['customer_info']['customer_name'] if 'customer_name' in data['hits'][data_length]['data']['customer_info'] else '',
             data['hits'][data_length]['data']['customer_info']['customer_no'] if 'customer_no' in data['hits'][data_length]['data']['customer_info'] else '',
-            data['hits'][data_length]['data']['customer_info']['customer_email'] if 'customer_email' in data['hits'][data_length]['data']['customer_info'] else '',
+            data['hits'][data_length]['data']['customer_info']['email'] if 'email' in data['hits'][data_length]['data']['customer_info'] else '',
             data['hits'][data_length]['data']['billing_address']['_type'] if '_type' in data['hits'][data_length]['data']['billing_address'] else '',
             data['hits'][data_length]['data']['billing_address']['address1'] if 'address1' in data['hits'][data_length]['data']['billing_address'] else '',
             data['hits'][data_length]['data']['billing_address']['city'] if 'city' in data['hits'][data_length]['data']['billing_address'] else '',
