@@ -66,7 +66,7 @@ while hasNextP:
         {"query":"query Fulfilments($cursor:String){\
         fulfilments(createdOn: {from: \\"2020-10-19\\"},first: 50, after:$cursor) {\
           pageInfo { hasNextPage, hasPreviousPage } edges {\
-          cursor, node { id, ref, order{ id, ref, createdOn, updatedOn, status } status, type, createdOn, toAddress {\
+          cursor, node { id, ref, order{ id, ref, createdOn, updatedOn, status } status, type, createdOn, updatedOn, toAddress {\
           id, ref }, fromAddress { id, ref }, attributes { type, value, name }, items(first: 50) {\
           itemEdge: edges { itemNode: node {\
           id, ref, status, requestedQuantity, filledQuantity, rejectedQuantity, orderItem { id, ref, status, quantity, currency, paidPrice product { ... on VariantProduct { ref } } }\
@@ -108,6 +108,7 @@ while data_length != -1:
         newData[data_length]['node']['status'],
         newData[data_length]['node']['type'],
         newData[data_length]['node']['createdOn'],
+        newData[data_length]['node']['updatedOn'],
         newData[data_length]['node']['toAddress'],
         newData[data_length]['node']['fromAddress'],
         newData[data_length]['node']['attributes'][0]['type'],
@@ -142,6 +143,7 @@ original_row = [
     'node_status',
     'node_type',
     'node_createdOn',
+    'node_updatedOn',
     'node_toAddress',
     'node_fromAddress',
     'node_attributes_name_0',
