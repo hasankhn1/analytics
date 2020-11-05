@@ -80,7 +80,6 @@ while total != 0:
   if totalFlag == 1:
     total = math.ceil(data['total']/200)
     totalFlag  = 0
-  print(data['total'])
   if len(data['hits']):
     data_length = len(data['hits']) - 1
     while data_length != -1:

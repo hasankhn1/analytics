@@ -40,6 +40,8 @@ def upload_to_aws_sfcc(local_file, bucket, s3_file):
 
 
 uploaded = upload_to_aws(
+    'test_orders_uae.csv', 'sss-sfcc-ocapi-output', 'test_stitch/uae_orders.csv')
+uploaded = upload_to_aws(
     'orders_uae.csv', 'sss-sfcc-ocapi-output', 'uae_orders.csv')
 uploaded = upload_to_aws(
     'orders_ksa.csv', 'sss-sfcc-ocapi-output', 'ksa_orders.csv')
