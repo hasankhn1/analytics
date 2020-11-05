@@ -24,13 +24,13 @@ def scheduled_task():
   os.system('python fulfilments.py')
   os.system('python return_fulfilments.py')
   os.system('python return_order.py')
-  os.system('python uae_test.py')
+  # os.system('python uae_test.py')
 
 def scheduled_analytics():
   os.system('python anlaytics.py')
 
 if __name__ == '__main__':
-  scheduler.add_job(id='Scheduled Orders', func=scheduled_task, trigger='interval', minutes = 8)
+  scheduler.add_job(id='Scheduled Orders', func=scheduled_task, trigger='interval', minutes = 10)
   scheduler.add_job(id='Analytics', func=scheduled_analytics, trigger='interval', minutes = 15)
   scheduler.start()
   app.run(port=5000, use_reloader=False)

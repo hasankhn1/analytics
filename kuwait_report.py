@@ -86,6 +86,7 @@ while total != 0:
       single_row = data['hits'][data_length]
       for edge_row in single_row['data']['product_items']:
         allNewData.append([
+            "{} _ {}".format(data['hits'][data_length]['data']['order_no'], edge_row['product_id']),
             data['hits'][data_length]['data']['_type'],
             data['hits'][data_length]['data']['adjusted_merchandize_total_tax'],
             data['hits'][data_length]['data']['adjusted_shipping_total_tax'],

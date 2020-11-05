@@ -1,4 +1,5 @@
 APPEND_HEADERS = [
+    'primary_key',
     'order__type',
     'order_adjusted_merchandize_total_tax',
     'order_adjusted_shipping_total_tax',
