@@ -4,50 +4,9 @@ from requests.auth import HTTPBasicAuth
 import math
 import csv
 import pandas as pd
-from headers import APPEND_HEADERS
 from decouple import config 
 
-def get_unique_numbers(numbers):
-    unique = []
-    for number in numbers:
-        if number not in unique:
-            unique.append(number)
-    return unique
 
-
-def flatten_jsony(y):
-    out = {}
-
-    def flatten(x, name=''):
-        if type(x) is dict:
-            for a in x:
-                flatten(x[a], name + a + '_')
-        elif type(x) is list:
-            i = 0
-            for a in x:
-                flatten(a, name + str(i) + '_')
-                i += 1
-        else:
-            out[name[:-1]] = x
-    flatten(y)
-    return out
-
-
-def flatten_json(y):
-  out = {}
-
-  def flatten(x, name=''):
-      if type(x) is dict:
-          for a in x:
-              flatten(x[a], name + a + '_')
-      elif type(x) is list:
-          i = 0
-          for a in x:
-              flatten(a, name + str(i) + '_')
-      else:
-          out[name[:-1]] = x
-  flatten(y)
-  return out
 allReturns = []
 users = 3
 retailerId = "1"
@@ -106,16 +65,7 @@ while users != 0:
     for i in allData:
       for edge in i['data']['returnOrders']['edges']:
         newData.append(edge)
-    header_data = flatten_json(newData)
-    headers_data = flatten_jsony(newData)
-    row = []
-    original_row = []
-    for key in header_data.keys():
-      original_row.append(key.replace('data_', "").replace('0_', ""))
-
-    for key in headers_data.keys():
-      row.append(key.replace('data_', ""))
-
+    
     allNewData = []
     data_length = len(newData)-1
     while data_length != -1:
