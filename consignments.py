@@ -78,7 +78,8 @@ while data_length != -1:
         edge_row['articleNode']['article']['status'],
         json.dumps(edge_row['articleNode']['article']['attributes']),
         json.dumps(edge_row['articleNode']['article']['fulfilments']['edges']),
-        next((shipment['value'] for shipment in edge_row['articleNode']['article']['attributes'] if shipment['name'] == 'shipmentDatetime'), None) if edge_row['articleNode']['article']['attributes']  else ''
+        next((shipment['value'] for shipment in edge_row['articleNode']['article']['attributes'] if shipment['name'] == 'shipmentDatetime'), None) if edge_row['articleNode']['article']['attributes']  else '',
+        edge_row['articleNode']['article']['fulfilments']['edges'][0]['node']['id']
     ])
   data_length = data_length - 1
 
@@ -101,7 +102,8 @@ original_row = [
     'node_article_status',
     'node_article_attributes',
     'node_article_fulfilments_edges',
-    'shipment_date'
+    'shipment_date',
+    'node_consignmentArticles_articleEdge_articleNode_article_fulfilments_edges_node_id'
 ]
 
 city = pd.DataFrame(allNewData, columns=original_row)
