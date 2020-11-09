@@ -26,7 +26,7 @@ while hasNextP:
   body = """
   {"query":
     "query searchConsignments($ref: [String!]!, $aftercursor: String,$beforecursor: String){\
-      consignments(ref: $ref, first: 70,createdOn: {from: \\"2020-11-06\\"}, after:$aftercursor, before: $beforecursor) {\
+      consignments(ref: $ref, first: 70,createdOn: {from: \\"2020-10-19\\"}, after:$aftercursor, before: $beforecursor) {\
         pageInfo {hasNextPage hasPreviousPage }\
           edges { cursor node { id, ref, status, createdOn, updatedOn, trackingLabel, carrier {id,ref,status}, consignmentReference consignmentArticles(first: 10) {\
             articleEdge: edges { articleNode: node {\
