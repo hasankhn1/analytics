@@ -46,6 +46,7 @@ while data_length != -1:
   single_row = newData[data_length]
   for edge_row in single_row['node']['items']['itemEdge']:
     allNewData.append([
+        '{}{}'.format(edge_row['itemNode']['id'],newData[data_length]['node']['order']['ref']),
         newData[data_length]['cursor'],
         newData[data_length]['node']['id'],
         newData[data_length]['node']['ref'],
@@ -81,6 +82,7 @@ while data_length != -1:
     ])
   data_length = data_length - 1
 original_row = [
+    'primary_key',
     'cursor',
     'node_id',
     'node_ref',

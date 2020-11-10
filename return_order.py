@@ -11,6 +11,8 @@ allReturns = []
 users = 3
 retailerId = "1"
 token = ''
+allData = []
+
 while users != 0:
   if users == 1:
     url = "https://sssports.api.fluentretail.com/oauth/token?username={}&password={}&client_id=SSSPORTS&client_secret=ce3304b2-6e2a-4922-bf6c-24515b623361&grant_type=password&scope=api".format(config('UAE_USERNAME'),config('UAE_PASSWORD'))
@@ -31,7 +33,6 @@ while users != 0:
     token = response_dict["access_token"]
     retailerId = "3"
   hasNextP = True
-  allData = []
   newData = []
   cursor = ""
   while hasNextP:
@@ -57,46 +58,40 @@ while users != 0:
 
     response = requests.post(new_url, headers=new_header, data=body)
     data = response.json()
-    if len(data['data']['returnOrders']['edges']) == 0:
+    for edge in data['data']['returnOrders']['edges']:
+      allData.append(edge)
+    if not data['data']['returnOrders']['edges'] and data['data']['returnOrders']['pageInfo']['hasNextPage'] == False:
+      users = users - 1
       break
     else:
       cursor = data['data']['returnOrders']['edges'][len(data['data']['returnOrders']['edges'])-1]['cursor']
-      allData.append(data)
-    for i in allData:
-      for edge in i['data']['returnOrders']['edges']:
-        newData.append(edge)
-    
-    allNewData = []
-    data_length = len(newData)-1
-    while data_length != -1:
-      single_row = newData[data_length]
-      for edge_row in single_row['node']['attributes']:
-        allNewData.append([
-            newData[data_length]['cursor'],
-            newData[data_length]['node']['id'],
-            newData[data_length]['node']['ref'],
-            newData[data_length]['node']['type'],
-            newData[data_length]['node']['status'],
-            newData[data_length]['node']['createdOn'],
-            newData[data_length]['node']['updatedOn'],
-            newData[data_length]['node']['currency']['alphabeticCode'],
-            newData[data_length]['node']['exchangeOrder'],
-            newData[data_length]['node']['order']['ref'],
-            newData[data_length]['node']['retailer']['id'],
-            newData[data_length]['node']['subTotalAmount']['amount'],
-            newData[data_length]['node']['totalAmount']['amount'],
-            newData[data_length]['node']['customer']['ref'],
-            newData[data_length]['node']['lodgedLocation'],
-            newData[data_length]['node']['destinationLocation'],
-            edge_row['name'],
-            edge_row['type'],
-            edge_row['value'],
-        ])
-      data_length = data_length - 1
-    allReturns.append(allNewData)
-    if data['data']['returnOrders']['pageInfo']['hasNextPage'] == False:
-      break
-  users = users - 1
+
+allNewData = []
+data_length = len(allData)-1
+print(json.dumps(allData))
+while data_length != -1:
+  single_row = allData[data_length]
+  allNewData.append([
+      allData[data_length]['cursor'],
+      allData[data_length]['node']['id'],
+      allData[data_length]['node']['ref'],
+      allData[data_length]['node']['type'],
+      allData[data_length]['node']['status'],
+      allData[data_length]['node']['createdOn'],
+      allData[data_length]['node']['updatedOn'],
+      allData[data_length]['node']['currency']['alphabeticCode'],
+      allData[data_length]['node']['exchangeOrder'],
+      allData[data_length]['node']['order']['ref'],
+      allData[data_length]['node']['retailer']['id'],
+      allData[data_length]['node']['subTotalAmount']['amount'],
+      allData[data_length]['node']['totalAmount']['amount'],
+      allData[data_length]['node']['customer']['ref'],
+      allData[data_length]['node']['lodgedLocation'],
+      allData[data_length]['node']['destinationLocation'],
+      json.dumps(allData[data_length]['node']['attributes']),
+  ])
+  data_length = data_length - 1
+
 original_row = [
     'cursor',
     'node_id',
@@ -114,13 +109,8 @@ original_row = [
     'node_customer_ref',
     'node_lodge_location',
     'node_destination_location',
-    'name',
-    'type',
-    'value'
+    'node_attributes'
 ]
 
-csvReturns = []
-for ret in allReturns:
-  csvReturns = csvReturns + ret
-city = pd.DataFrame(csvReturns, columns=original_row)
+city = pd.DataFrame(allNewData, columns=original_row)
 city.to_csv('return_order.csv')
