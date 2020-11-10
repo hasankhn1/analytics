@@ -40,8 +40,8 @@ while users != 0:
     new_header = {'Authorization': 'Bearer '+ token, 'Origin': 'https://production-eu01-sunandsand.demandware.net',
                   'Content-Type': ''}
     body = """{"query":\
-      "query getReturnFulfilment ($ref: [String!]) {\
-        returnFulfilments(ref:$ref,createdOn: {from: \\"2020-10-19\\"},first: 100) {\
+      "query getReturnFulfilment ($ref: [String!], $cursor: String) {\
+        returnFulfilments(ref:$ref,createdOn: {from: \\"2020-10-19\\"},first: 100, after: $cursor) {\
           pageInfo { hasNextPage  hasPreviousPage } edges {\
             cursor node  { id, ref, type, returnOrder {  ref,  id,  order { ref }  id,  ref }\
               status,createdOn,updatedOn,attributes {  name  type  value } returnFulfilmentItems {\

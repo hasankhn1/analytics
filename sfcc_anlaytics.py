@@ -47,15 +47,3 @@ uploaded = upload_to_aws(
     'orders_ksa.csv', 'sss-sfcc-ocapi-output', 'ksa_orders.csv')
 uploaded = upload_to_aws(
     'orders_kuwait.csv', 'sss-sfcc-ocapi-output', 'kuwait_orders.csv')
-
-uploaded = upload_to_aws_sfcc(
-    'fulfilments.csv', 'sss-fluent-output', 'fulfilments/fulfilments.csv')
-
-uploaded = upload_to_aws_sfcc(
-    'consignments.csv', 'sss-fluent-output', 'consignments/consignments.csv')
-
-uploaded = upload_to_aws_sfcc(
-    'return_order.csv', 'sss-fluent-output', 'return_orders/return_order.csv')
-
-uploaded = upload_to_aws_sfcc(
-    'return_fulfilments.csv', 'sss-fluent-output', 'return_items/return_fulfilments.csv')
