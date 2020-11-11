@@ -68,7 +68,6 @@ while users != 0:
 
 allNewData = []
 data_length = len(allData)-1
-print(json.dumps(allData))
 while data_length != -1:
   single_row = allData[data_length]
   allNewData.append([
