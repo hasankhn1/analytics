@@ -99,6 +99,7 @@ while total != 0:
             data['hits'][data_length]['data']['customer_info']['customer_name'] if 'customer_name' in data['hits'][data_length]['data']['customer_info'] else '',
             data['hits'][data_length]['data']['customer_info']['customer_no'] if 'customer_no' in data['hits'][data_length]['data']['customer_info'] else '',
             data['hits'][data_length]['data']['customer_info']['email'] if 'email' in data['hits'][data_length]['data']['customer_info'] else '',
+            data['hits'][data_length]['data']['c_customerPhoneNumber'] if 'c_customerPhoneNumber' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['data']['billing_address']['_type'] if '_type' in data['hits'][data_length]['data']['billing_address'] else '',
             data['hits'][data_length]['data']['billing_address']['address1'] if 'address1' in data['hits'][data_length]['data']['billing_address'] else '',
             data['hits'][data_length]['data']['billing_address']['city'] if 'city' in data['hits'][data_length]['data']['billing_address'] else '',
@@ -119,6 +120,7 @@ while total != 0:
             data['hits'][data_length]['data']['notes']['link'],
             data['hits'][data_length]['data']['order_no'],
             json.dumps(data['hits'][data_length]['data']['order_price_adjustments']) if 'order_price_adjustments' in data['hits'][data_length]['data'] else '',
+            json.dumps(data['hits'][data_length]['data']['price_adjustments']) if 'price_adjustments' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['data']['order_token'],
             data['hits'][data_length]['data']['order_total'],
             json.dumps(data['hits'][data_length]['data']['payment_instruments']),
@@ -186,6 +188,9 @@ while total != 0:
             data['hits'][data_length]['data']['c_sscSyncResponseText'] if 'c_sscSyncResponseText' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['data']['c_sscSyncStatus'] if 'c_sscSyncStatus' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['data']['c_sscid'] if 'c_sscid' in data['hits'][data_length]['data'] else '',
+            json.dumps(data['hits'][data_length]['data']['c_refundHistory']) if 'c_refundHistory' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_lastPaymentStatus'] if 'c_lastPaymentStatus' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_paymentType'] if 'c_paymentType' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['relevance'] if 'relevance' in data['hits'][data_length] else '',
         ])
       data_length = data_length - 1
