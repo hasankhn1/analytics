@@ -12,6 +12,7 @@ APPEND_HEADERS = [
     'order_customer_info_customer_name',
     'order_customer_info_customer_no',
     'order_customer_info_email',
+    'order_customer_phone_no',
     'order_billing_address_type',
     'order_billing_addressaddress1',
     'order_billing_addresscity',
@@ -32,6 +33,7 @@ APPEND_HEADERS = [
     'order_noteslink',
     'order_order_no',
     'order_order_price_adjustments',
+    'price_adjustments',
     'order_order_token',
     'order_order_total',
     'order_payment_instruments',
@@ -99,5 +101,8 @@ APPEND_HEADERS = [
     'order_c_sscSyncResponseText',
     'order_c_sscSyncStatus',
     'order_c_sscid',
+    'order_c_refundHistory',
+    'order_c_lastPaymentStatus',
+    'order_c_paymentType',
     'relevance'
 ]
