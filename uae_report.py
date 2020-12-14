@@ -62,7 +62,7 @@ while total != 0:
             "filter": {
                 "range_filter": {
                     "field": "creation_date",
-                    "from": "2020-12-12"
+                    "from": "2020-10-19"
                 }
             },
             "query" : {
