@@ -100,6 +100,7 @@ APPEND_HEADERS = [
     'order_c_sscContactId',
     'order_c_sscSyncResponseText',
     'order_c_sscSyncStatus',
+    'order_c_channel',
     'order_c_sscid',
     'order_c_refundHistory',
     'order_c_lastPaymentStatus',
