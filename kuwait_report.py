@@ -189,7 +189,7 @@ while total != 0:
             data['hits'][data_length]['data']['c_sscSyncStatus'] if 'c_sscSyncStatus' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['data']['c_channel'] if 'c_channel' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['data']['c_sscid'] if 'c_sscid' in data['hits'][data_length]['data'] else '',
-            json.dumps(data['hits'][data_length]['data']['c_refundHistory']) if 'c_refundHistory' in data['hits'][data_length]['data'] else '',
+            json.dumps(json.loads(data['hits'][data_length]['data']['c_refundHistory'])) if 'c_refundHistory' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['data']['c_lastPaymentStatus'] if 'c_lastPaymentStatus' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['data']['c_paymentType'] if 'c_paymentType' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['relevance'] if 'relevance' in data['hits'][data_length] else '',
