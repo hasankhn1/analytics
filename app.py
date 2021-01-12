@@ -40,8 +40,20 @@ def fluent_analytics():
   os.system('python fluent_analytics.py')
 
 
+def ats_tasks():
+  print('running3')
+  os.system('python ksa_ats.py')
+  os.system('python uae_ats.py')
+  os.system('python kuwait_ats.py')
+
+def ats_analytics():
+  os.system('python ats_analytics.py')
+
+
 if __name__ == '__main__':
 
+  scheduler.add_job(id='ats_tasks', trigger='cron' , func=ats_tasks, hour='2', minute='0' )
+  scheduler.add_job(id='ats_analytics', trigger='cron' , func=ats_analytics, hour='3', minute='0' )
   scheduler.add_job(id='sfcc', func=sfcc_task, trigger='interval', minutes = 6)
   scheduler.add_job(id='sfcc_analytics', func=sfcc_analytics, trigger='interval', minutes = 10)
   scheduler.add_job(id='fluent', func=fluent_task, trigger='interval', minutes = 20)
