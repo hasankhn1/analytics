@@ -54,9 +54,9 @@ if __name__ == '__main__':
 
   scheduler.add_job(id='ats_tasks', trigger='cron' , func=ats_tasks, hour='2', minute='0' )
   scheduler.add_job(id='ats_analytics', trigger='cron' , func=ats_analytics, hour='3', minute='0' )
-  scheduler.add_job(id='sfcc', func=sfcc_task, trigger='interval', minutes = 6)
-  scheduler.add_job(id='sfcc_analytics', func=sfcc_analytics, trigger='interval', minutes = 10)
-  scheduler.add_job(id='fluent', func=fluent_task, trigger='interval', minutes = 20)
+  scheduler.add_job(id='sfcc', func=sfcc_task, trigger='interval', minutes = 40)
+  scheduler.add_job(id='sfcc_analytics', func=sfcc_analytics, trigger='interval', minutes = 30)
+  scheduler.add_job(id='fluent', func=fluent_task, trigger='interval', minutes = 40)
   scheduler.add_job(id='fluent_analytics', func=fluent_analytics, trigger='interval', minutes = 30)
   scheduler.start()
   app.run(port=5000, use_reloader=False)
