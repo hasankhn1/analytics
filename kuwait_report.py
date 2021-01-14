@@ -7,37 +7,9 @@ import pandas as pd
 from headers import APPEND_HEADERS
 
 
-def get_unique_numbers(numbers):
-    unique = []
-    for number in numbers:
-        if number not in unique:
-            unique.append(number)
-    return unique
-
-
-def flatten_json(y):
-    out = {}
-
-    def flatten(x, name=''):
-        if type(x) is dict:
-            for a in x:
-                flatten(x[a], name + a + '_')
-        elif type(x) is list:
-            i = 0
-            for a in x:
-                flatten(a, name + str(i) + '_')
-                i += 1
-        else:
-            out[name[:-1]] = x
-    flatten(y)
-    return out
-
-
 url = "https://account.demandware.com/dw/oauth2/access_token?client_id={{client_id}}"
-url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77',
-             'grant_type': 'client_credentials'}
-authen = HTTPBasicAuth(
-    'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77', 'ae9l8yKmKT5rNjy')
+url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77','grant_type': 'client_credentials'}
+authen = HTTPBasicAuth('ce6abb4e-faf1-41af-94e7-feb1e2dd4a77', 'ae9l8yKmKT5rNjy')
 header = {'Content-Type': 'application/x-www-form-urlencoded'}
 response = requests.post(url, auth=authen, params=url_param, headers=header)
 response_dict = json.loads(response.text)
@@ -45,8 +17,7 @@ token = response_dict["access_token"]
 result = []
 new_url = "https://production-eu01-sunandsand.demandware.net/s/Kuwait/dw/shop/v20_2/order_search"
 new_url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77'}
-new_header = {'Authorization': 'Bearer ' + token, 'Origin': 'https://production-eu01-sunandsand.demandware.net',
-              'Content-Type': 'application/json;charset=UTF-8'}
+new_header = {'Authorization': 'Bearer ' + token, 'Origin': 'https://production-eu01-sunandsand.demandware.net','Content-Type': 'application/json;charset=UTF-8'}
 
 total = 1
 totalFlag = 1
@@ -79,8 +50,20 @@ while total != 0:
   data = response.json()
   if totalFlag == 1:
     total = math.ceil(data['total']/200)
-    totalFlag  = 0
-  if len(data['hits']):
+    totalFlag = 0
+  if total % 100 == 0:
+    url = "https://account.demandware.com/dw/oauth2/access_token?client_id={{client_id}}"
+    url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77','grant_type': 'client_credentials'}
+    authen = HTTPBasicAuth('ce6abb4e-faf1-41af-94e7-feb1e2dd4a77', 'ae9l8yKmKT5rNjy')
+    header = {'Content-Type': 'application/x-www-form-urlencoded'}
+    response = requests.post(url, auth=authen, params=url_param, headers=header)
+    response_dict = json.loads(response.text)
+    token = response_dict["access_token"]
+    result = []
+    new_url = "https://production-eu01-sunandsand.demandware.net/s/Kuwait/dw/shop/v20_2/order_search"
+    new_url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77'}
+    new_header = {'Authorization': 'Bearer ' + token, 'Origin': 'https://production-eu01-sunandsand.demandware.net','Content-Type': 'application/json;charset=UTF-8'}
+  if 'hits' in data and len(data['hits']):
     data_length = len(data['hits']) - 1
     while data_length != -1:
       single_row = data['hits'][data_length]
@@ -120,7 +103,8 @@ while total != 0:
             data['hits'][data_length]['data']['notes']['link'],
             data['hits'][data_length]['data']['order_no'],
             json.dumps(data['hits'][data_length]['data']['order_price_adjustments']) if 'order_price_adjustments' in data['hits'][data_length]['data'] else '',
-            json.dumps([item['price_adjustments'] for item in data['hits'][data_length]['data']['product_items'] if 'price_adjustments' in item][0]) if len([item['price_adjustments'] for item in data['hits'][data_length]['data']['product_items'] if 'price_adjustments' in item]) else '',
+            json.dumps([item['price_adjustments'] for item in data['hits'][data_length]['data']['product_items'] if 'price_adjustments' in item][0]) if len(
+                [item['price_adjustments'] for item in data['hits'][data_length]['data']['product_items'] if 'price_adjustments' in item]) else '',
             data['hits'][data_length]['data']['order_token'],
             data['hits'][data_length]['data']['order_total'],
             json.dumps(data['hits'][data_length]['data']['payment_instruments']),
