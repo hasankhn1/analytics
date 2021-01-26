@@ -78,7 +78,7 @@ while data_length != -1:
         edge_row['itemNode']['orderItem']['quantity'],
         edge_row['itemNode']['orderItem']['currency'],
         edge_row['itemNode']['orderItem']['paidPrice'],
-        edge_row['itemNode']['orderItem']['product']['ref'],
+        json.dumps(edge_row['itemNode']['orderItem']['product']['ref'])
     ])
   data_length = data_length - 1
 original_row = [

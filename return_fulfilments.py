@@ -91,7 +91,7 @@ while data_length != -1:
         edge_row['returnFulfilmentItemNode']['id'],
         edge_row['returnFulfilmentItemNode']['ref'],
         edge_row['returnFulfilmentItemNode']['createdOn'],
-        edge_row['returnFulfilmentItemNode']['product']['ref'],
+        json.dumps(edge_row['returnFulfilmentItemNode']['product']['ref']),
         edge_row['returnFulfilmentItemNode']['unitQuantity']['quantity'],
         edge_row['returnFulfilmentItemNode']['returnFulfilmentItemAttriutes'],
     ])
