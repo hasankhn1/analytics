@@ -177,6 +177,8 @@ while total != 0:
             data['hits'][data_length]['data']['c_lastPaymentStatus'] if 'c_lastPaymentStatus' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['data']['c_paymentType'] if 'c_paymentType' in data['hits'][data_length]['data'] else '',
             data['hits'][data_length]['relevance'] if 'relevance' in data['hits'][data_length] else '',
+            data['hits'][data_length]['data']['c_cancellationReason'] if 'c_cancellationReason' in data['hits'][data_length]['data'] else '',
+            data['hits'][data_length]['data']['c_cancellationReasonText'] if 'c_cancellationReasonText' in data['hits'][data_length]['data'] else '',
         ])
       data_length = data_length - 1
     start = recevied * 200

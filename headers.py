@@ -105,5 +105,7 @@ APPEND_HEADERS = [
     'order_c_refundHistory',
     'order_c_lastPaymentStatus',
     'order_c_paymentType',
-    'relevance'
+    'relevance',
+    'order_cancellationReason',
+    'order_cancellationReasonText'
 ]
