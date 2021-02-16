@@ -29,7 +29,7 @@ new_header = {'Authorization': 'Bearer ' + token, 'Origin': 'https://production-
 
 connection = sqlite3.connect('analytics_sfcc.db')
 cursor = connection.cursor()
-query = "Select ksa_sfcc from analytics"
+query = "Select kuwait_sfcc from analytics"
 result = cursor.execute(query)
 row = result.fetchone()
 connection.close()
