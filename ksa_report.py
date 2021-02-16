@@ -5,6 +5,14 @@ import math
 import csv
 import pandas as pd
 from headers import APPEND_HEADERS
+import sqlite3
+from contextlib import contextmanager
+
+@contextmanager
+def open_file(path, mode):
+     file_to=open(path,mode)
+     yield file_to
+     file_to.close()
 
 url = "https://account.demandware.com/dw/oauth2/access_token?client_id={{client_id}}"
 url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77','grant_type': 'client_credentials'}
@@ -18,21 +26,29 @@ new_url = "https://production-eu01-sunandsand.demandware.net/s/KSA/dw/shop/v20_2
 new_url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77'}
 new_header = {'Authorization': 'Bearer ' + token, 'Origin': 'https://production-eu01-sunandsand.demandware.net','Content-Type': 'application/json;charset=UTF-8'}
 
+
+connection = sqlite3.connect('analytics_sfcc.db')
+cursor = connection.cursor()
+query = "Select ksa_sfcc from analytics"
+result = cursor.execute(query)
+row = result.fetchone()
+connection.close()
+
 total = 1
 totalFlag = 1
 allNewData = []
 start = 0
 count = 200
 recevied = 1
-
+last_modified = ''
 while total != 0:
   body = """
     {"query" : {
         "filtered_query": {
             "filter": {
                 "range_filter": {
-                    "field": "creation_date",
-                    "from": "2020-10-19"
+                    "field": "last_modified",
+                    "from": \""""+row[0]+"""\"
                 }
             },
             "query" : {
@@ -43,25 +59,13 @@ while total != 0:
     "start": """+str(start)+""",
     "count":"""+str(count)+""",
     "select" : "(**)",
-    "sorts" : [{"field":"creation_date", "sort_order":"asc"}]
+    "sorts" : [{"field":"last_modified", "sort_order":"asc"}]
     }"""
   response = requests.post(new_url, headers=new_header, data=body)
   data = response.json()
   if totalFlag == 1:
     total = math.ceil(data['total']/200)
     totalFlag = 0
-  if total % 100 == 0:
-    url = "https://account.demandware.com/dw/oauth2/access_token?client_id={{client_id}}"
-    url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77','grant_type': 'client_credentials'}
-    authen = HTTPBasicAuth('ce6abb4e-faf1-41af-94e7-feb1e2dd4a77', 'ae9l8yKmKT5rNjy')
-    header = {'Content-Type': 'application/x-www-form-urlencoded'}
-    response = requests.post(url, auth=authen, params=url_param, headers=header)
-    response_dict = json.loads(response.text)
-    token = response_dict["access_token"]
-    result = []
-    new_url = "https://production-eu01-sunandsand.demandware.net/s/KSA/dw/shop/v20_2/order_search"
-    new_url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77'}
-    new_header = {'Authorization': 'Bearer ' + token, 'Origin': 'https://production-eu01-sunandsand.demandware.net','Content-Type': 'application/json;charset=UTF-8'}
   if 'hits' in data and len(data['hits']):
     data_length = len(data['hits']) - 1
     while data_length != -1:
@@ -179,9 +183,18 @@ while total != 0:
             data['hits'][data_length]['data']['c_cancellationReasonText'] if 'c_cancellationReasonText' in data['hits'][data_length]['data'] else '',
         ])
       data_length = data_length - 1
+      last_modified = data['hits'][data_length]['data']['last_modified']
     start = recevied * 200
     recevied = recevied + 1
     total = total - 1
 
-city = pd.DataFrame(allNewData, columns=APPEND_HEADERS)
-city.to_csv('orders_ksa.csv')
+saved_df = pd.DataFrame(allNewData)
+with open_file('orders_ksa.csv', 'r') as infile:
+    saved_df.to_csv('orders_ksa.csv', mode='a', header=False)
+
+connection = sqlite3.connect('analytics_sfcc.db')
+query = "Update analytics set ksa_sfcc = ?"
+cursor = connection.cursor()
+result = cursor.execute(query,([last_modified]))
+connection.commit()
+connection.close()
