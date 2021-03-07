@@ -40,24 +40,11 @@ while users != 0:
     # new_url_param = {'client_id': 'ce6abb4e-faf1-41af-94e7-feb1e2dd4a77'}
     new_header = {'Authorization': 'Bearer '+ token, 'Origin': 'https://production-eu01-sunandsand.demandware.net',
                   'Content-Type': ''}
-    body = """{"query":\
-      "query searchReturnOrder ($retailerId: ID!, $ref : [String!], $cursor:String, $exchangeOrder: OrderLinkInput,  $includeAttributes: Boolean!) {\
-        returnOrders (first: 100, ref: $ref,  createdOn: {from:\\"2020-10-19\\"}, retailer: { id: $retailerId }, exchangeOrder: $exchangeOrder, after: $cursor) {\
-          pageInfo{hasNextPage}\
-          edges { cursor node {ref id type status createdOn updatedOn currency { alphabeticCode }exchangeOrder {\
-            ref }order { ref }retailer { id }subTotalAmount { amount } totalAmount { amount }customer { ref } exchangeOrder { ref }\
-              lodgedLocation{ ref } destinationLocation { ref } retailer { id } attributes @include(if: $includeAttributes) {\
-                name type value }\
-                }\
-              }\
-            }\
-          }",\
-        "variables":{"retailerId":\""""+retailerId+"""\","includeAttributes":true,"includeFulfilment":true, "cursor": \""""+cursor+"""\"\
-      }\
-    }"""
-
+    body = """{"query":"query searchReturnOrder ($retailerId: ID!, $ref : [String!], $exchangeOrder: OrderLinkInput,  $includeAttributes: Boolean!, $includeFulfilment : Boolean!) {returnOrders (first: 10, ref: $ref, retailer: { id: $retailerId }, exchangeOrder: $exchangeOrder) {pageInfo{hasNextPage} edges {cursor node {  ref, id, type, status, updatedOn, createdOn, currency { alphabeticCode }exchangeOrder { ref  } order { ref } retailer { id }subTotalAmount { amount }totalAmount { amount } customer { ref } exchangeOrder { ref  }  lodgedLocation{ ref }destinationLocation{ ref }, retailer{ id }attributes @include(if: $includeAttributes) { name, type, value }returnOrderFulfilments (first: 20) @include(if: $includeFulfilment) { fulfilmentEdges: edges {fulfilmentNode: node { id, ref, status, type, destinationLocation { ref } fulfilmentAttributes: attributes {name,  value,  type }, returnFulfilmentItems (first:15) { returnFulfilmentItemEdges: edges {returnFulfilmentItemNode: node { id, ref, product, { ref }unitQuantity { quantity }returnFulfilmentItemAttriutes: attributes { name, value, type }}}}}}}}}}}","variables":{"retailerId":\""""+retailerId+"""\","includeAttributes":true,"includeFulfilment":true,"cursor": \""""+cursor+"""\"}}"""
     response = requests.post(new_url, headers=new_header, data=body)
     data = response.json()
+    print(body)
+    print(data)
     for edge in data['data']['returnOrders']['edges']:
       allData.append(edge)
     if not data['data']['returnOrders']['edges'] and data['data']['returnOrders']['pageInfo']['hasNextPage'] == False:
