@@ -131,7 +131,7 @@ while total != 0:
             edge_row['tax_basis'],
             edge_row['tax_class_id'],
             edge_row['tax_rate'],
-            edge_row['c_isBigBox'],
+            edge_row['c_isBigBox'] if 'c_isBigBox' in edge_row else '',
             edge_row['c_isCCAvailable'],
             edge_row['c_listPrice'],
             edge_row['c_maxBuyableQuantity'],
